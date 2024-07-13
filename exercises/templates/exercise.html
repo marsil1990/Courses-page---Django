@@ -1,0 +1,30 @@
+{% extends 'base/base.html' %}
+{% block title %} Course name -Lessons {% endblock %}
+{% load static %}
+{% block estilo %} 
+<link href="{% static 'assets/dist/css/lesson_exercises.css' %}" rel="stylesheet" >
+{% endblock %} 
+
+<!-- Div that contains lesson details -->
+{% block content %}
+
+
+<!-- Div that contains exercises for the lesson -->
+<div class="exercises-container">
+    <!-- Iterating over exercises -->
+    <div class="exercise">
+        <p class="exercise-description">{{ exercise.description }}</p>
+        <p>{{ exercise.phrase_multiple_option}}</p>
+        {% for answer in answers %}
+        <p>{{ answer.answer_option }}</p>
+        {% endfor %}
+        <form class = "registration-form" method="post">
+            {% csrf_token %}
+            {{ do_an_exercise.as_p }}
+        <button type="submit">Submit Response</button>
+     </form>
+    </div>
+    <h2>{{reply}}</h2>
+</div>
+
+{% endblock %}

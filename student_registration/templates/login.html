@@ -1,0 +1,20 @@
+
+{% extends 'base/base.html' %}
+{% block title %} Register {% endblock %}
+{% load static %}
+{% block estilo %}
+<link href="{% static 'assets/dist/css/login.css' %}" rel="stylesheet" >
+ {% endblock %}
+
+{% block content  %}
+
+<div class="container-login">
+    <form class="login-form" method="post">
+        {% csrf_token %}
+        <h2>Iniciar sesión</h2>
+        {{ form.as_p }}  <!-- Renderiza el formulario aquí -->
+        <button type="submit">Iniciar sesión</button>
+    </form>
+</div>
+{% endblock %}
+

@@ -1,0 +1,29 @@
+{% extends 'base/base.html' %}
+{% block title %} HOME {% endblock %}
+{% load static %}
+{% block estilo %} 
+<link href="{% static 'assets/dist/css/register_course.css' %}" rel="stylesheet" >
+<style>
+  input[type="image" i] {
+    width: 250px; /* Define el ancho deseado para la imagen */
+    height: auto; /* Ajusta la altura automáticamente para mantener la proporción */
+}
+</style>
+{% endblock %} 
+
+{% block content %}
+<div class="register-course">
+  <div class="register-course-title">
+    <h1>Register for a course</h1>
+    <h2>If you want to enroll in the course, you must purchase it; it costs $50.</h2>
+  </div>
+  
+  <div class="register-course-divForm">
+    {% csrf_token %}
+    {{paypal.render}}
+  </div>
+
+</div>
+
+
+{% endblock %}

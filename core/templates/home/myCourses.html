@@ -1,0 +1,30 @@
+
+{% extends 'base/base.html' %}
+{% block title %} Register {% endblock %}
+{% load static %}
+{% block estilo %}
+<link href="{% static 'assets/dist/css/home.css' %}" rel="stylesheet" >
+ {% endblock %}
+
+{% block content  %}
+<div class="course-title">
+  <h2>My Courses</h2>
+</div>
+
+<div id="content-courses">
+    {% for course in courses %}
+      <div class="course">
+        <img src="../../static/assets/brand/math.jpeg" alt="Curso 1">
+        <h2>{{course.name}}</h2>
+        <p>Subject: {{course.subject}}</p>
+        <p>Difficulty: {{course.difficulty}}</p>
+        <p>Description: {{course.description}}</p>
+        <button id="{{course.name}}"> Get into </button>
+      </div>
+      <script>
+            document.getElementById("{{course.name}}").addEventListener('click', function() {
+            window.location.href = "{% url 'course_lessons' course.name %}";
+          });
+      </script>
+      {% endfor %}
+{% endblock %}
