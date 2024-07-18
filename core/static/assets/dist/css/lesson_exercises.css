@@ -1,0 +1,90 @@
+/* CSS Styles */
+.lesson-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.lesson-info {
+    margin-bottom: 20px;
+}
+
+.btn-ingresar {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-ingresar:hover {
+    background-color: #0056b3;
+}
+
+/* Fuente de letra */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400&display=swap');
+
+/* Estilos para el contenedor de ejercicios */
+.exercises-container {
+    margin: 40px;
+}
+
+/* Estilos para cada ejercicio */
+.exercise {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* Estilos para la descripción del ejercicio */
+.exercise-description {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Estilos para la lista de opciones en ejercicios de completar */
+.exercise .options-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Estilos para cada opción en ejercicios de completar */
+.exercise .options-list li {
+    margin-bottom: 5px;
+}
+
+/* Estilos para el formulario */
+.registration-form {
+    margin-top: 10px;
+}
+
+/* Estilos para el botón de enviar */
+.registration-form button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+}
+
+.registration-form button:hover {
+    background-color: #0056b3;
+}
+
+/* Estilos para la respuesta */
+.reply {
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    margin-top: 20px;
+}

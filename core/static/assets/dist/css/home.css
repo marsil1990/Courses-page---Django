@@ -1,0 +1,70 @@
+#content-courses {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    padding-bottom: 90px;
+    padding-left: 30px;
+  }
+
+  .course-title{
+    width: 100%;
+    text-align: center;
+  }
+  
+  .course {
+    width: calc(33.33% - 20px); /* Ancho de cada div */
+    margin: 5px;
+    padding: 40px;
+    height: 500px; /* Establece una altura específica para cada caja */
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    overflow: hidden;
+    border: 1px solid #007bff; /* Contorno azul */
+    box-sizing: border-box;
+  }
+  
+  .course img {
+    width: 80%;
+    height: 40%;
+    margin-bottom: 5px;
+    margin-top: 0px;
+    border-radius: 5px; /* Borde redondeado para las imágenes */
+    max-width: 100%; /* Asegura que la imagen SVG no exceda el ancho del div */
+    max-height: 50%;
+  }
+  
+  .course h2 {
+    margin-top: 0;
+  }
+  
+  .course button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .course button:hover {
+    background-color: #45a049;
+  }
+
+  @media only screen and (max-width: 890px) {
+    #content-courses {
+      padding-left: 10px; /* Ajuste de relleno para dispositivos móviles */
+    }
+    .course {
+      width: 100%; /* Ocupa todo el ancho en dispositivos móviles */
+    }
+    .course img{
+        width: 50%;
+        height: auto;
+        margin-bottom: 5px;
+        margin-top: 0px;
+        border-radius: 5px; /* Borde redondeado para las imágenes */
+        max-width: 100%; /* Asegura que la imagen SVG no exceda el ancho del div */
+        max-height: 50%;
+    }
+  }

@@ -1,0 +1,65 @@
+/* Estilos para el contenedor del curso */
+.curso-container {
+    display: flex;
+    align-items: center;
+    margin: 20px;
+
+}
+
+/* Estilos para la imagen del curso */
+.course-image img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+/* Estilos para la información del curso */
+.course-info {
+    flex: 1;
+}
+
+/* Estilos para el título del curso */
+.course-info h2 {
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    color: #333;
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+/* Estilos para el párrafo de dificultad del curso */
+.course-info p {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #666;
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+/* Estilos para el contenedor de las lecciones */
+.lessons-container {
+    margin: 20px;
+}
+
+/* Estilos para cada lección */
+.lesson {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+/* Estilos para el enlace 'Ingresar' */
+.lesson a {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.lesson a:hover {
+    background-color: #0056b3;
+}
