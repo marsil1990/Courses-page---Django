@@ -13,16 +13,27 @@ Steps to get the application running:
 Add the .env file with the following environment variables, replacing the placeholder values with the necessary information:
 
 SECRET_KEY=''
+
 DEBUG=True
+
 ALLOWED_HOSTS=''
+
 DATABASE_URL=sqlite:///db.sqlite3
+
 EMAIL_HOST=smtp.gmail.com
+
 EMAIL_PORT=587
+
 EMAIL_HOST_USER=your_email@gmail.com
+
 EMAIL_HOST_PASSWORD=your_password
+
 EMAIL_USE_TLS=True
+
 PAYPAL_RECEIVER_EMAIL=''
+
 PAYPAL_TEST=True
+
 PAYPAL_BUY_BUTTON_IMAGE=''
 
 - python manage.py makemigrations
@@ -45,17 +56,29 @@ Pasos para que la aplicación funcione:
 - pip install -r requirements.txt
 Agrega el archivo .env con los siguientes variables de ambiente y con los datos que sean necesarios en lugar de la comillas:
 SECRET_KEY=''
+
 DEBUG=True
+
 ALLOWED_HOSTS= ""
+
 DATABASE_URL=sqlite:///db.sqlite3
+
 EMAIL_HOST=smtp.gmail.com
+
 EMAIL_PORT=587
+
 EMAIL_HOST_USER=tu_email@gmail.com
+
 EMAIL_HOST_PASSWORD=tu_contraseña
+
 EMAIL_USE_TLS=True
+
 PAYPAL_RECEIVER_EMAIL=""
+
 PAYPAL_TEST=True
+
 PAYPAL_BUY_BUTTON_IMAGE=""
+
 - python manage.py makemigrations
 - python manage.py migrate
 - python manage.py createsuperuser
