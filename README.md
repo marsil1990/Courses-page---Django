@@ -18,7 +18,7 @@ This is an educational platform where teachers can register, create courses with
 
 Clonar el repositorio / Clone the repository:
 
-git clone https://github.com/tu_usuario/tu_repositorio.git
+git clone https://github.com/marsil1990/Courses-page---Django.git
 cd tu_repositorio
 
 Crear un entorno virtual / Create a virtual environment:
