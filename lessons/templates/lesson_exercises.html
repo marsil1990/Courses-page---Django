@@ -1,0 +1,141 @@
+{% extends 'base/base.html' %}
+{% block title %} {{ lesson.topic }} - Lessons {% endblock %}
+{% load static %}
+
+{% block estilo %} 
+<link href="{% static 'assets/dist/css/lesson_exercises.css' %}" rel="stylesheet">
+<style>
+    .lesson-container {
+        max-width: 900px;
+        margin: auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .lesson-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+    .lesson-info{
+        justify-content: space-between;
+        width: 100%;
+    }
+    .lesson-info h2 {
+        color: #333;
+        font-weight: bold;
+        text-align: left;
+    }
+    .lesson-info p {
+        font-size: 16px;
+        color: #555;
+        text-align: left;
+    }
+    .btn-edit-lesson {
+        margin-left: auto;
+    }
+    .youtube-video {
+        text-align: center;
+        margin: 20px 0;
+    }
+    .exercises-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+    .btn-create-exercise {
+        margin-left: auto;
+    }
+    .exercises-container {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        justify-content: flex-start;
+    }
+    .exercise {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        flex: 1 1 calc(33.333% - 20px);
+        max-width: 300px;
+        text-align: center;
+    }
+    .exercise-description {
+        font-size: 14px;
+        color: #444;
+        margin-bottom: 10px;
+    }
+    .btn-ingresar {
+        display: inline-block;
+        padding: 8px 16px;
+        background: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+    .btn-ingresar:hover {
+        background: #0056b3;
+    }
+    .aprobado {
+        display: inline-block;
+        padding: 8px 12px;
+        background-color: #28a745;
+        color: white;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: bold;
+        margin-left: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="lesson-container">
+    <div class="lesson-header">
+        <h2>{{ lesson.topic }}</h2>
+        {% if user == 'Teacher' %}
+        <a href="{% url 'editLesson' lesson.id %}" class="btn btn-warning btn-sm btn-edit-lesson">Edit Lesson</a>
+        <a href="{% url 'delete_lesson' lesson.id %}" class="btn btn-warning btn-sm">Delete Lesson</a>
+        {% endif %}
+    </div>
+    <div class="lesson-info">
+        <p><strong>Goal:</strong> {{ lesson.goal }}</p>
+    </div>
+
+    <div class="youtube-video">
+        <iframe width="560" height="315" 
+            src="{{ lesson.url_video }}" 
+            title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+        </iframe>
+    </div>
+
+    <div class="exercises-header">
+        <h3>Exercises</h3>
+        {% if user == 'Teacher' %}
+        <a href="{% url 'createExercise' lesson.id %}" class="btn btn-primary btn-sm btn-create-exercise">Create Exercise</a>
+        {% endif %}
+    </div>
+    
+    <div class="exercises-container">
+        {% if exercises %}
+            {% for exercise in exercises %}
+                <div class="exercise">
+                    <p class="exercise-description">{{ exercise.description }}</p>
+                    <a href="{% url 'exercise' exercise.id %}" class="btn-ingresar">Start Exercise</a>
+                    {% if exercise in exercises_passed %}
+                        <span class="aprobado">&#9989; Approved</span>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No exercises available for this lesson.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

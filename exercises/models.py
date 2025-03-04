@@ -10,9 +10,15 @@ class ExerciseMultipleOption(models.Model):
     phrase_multiple_option = models.TextField(blank=True, null=False)
     answer_correct_multiOption = models.CharField(max_length=50, blank=True, null=False)
 
+    @staticmethod
     def answers(self):
        answers = Exercise_options.objects.filter(exerciseMultipleOption=self)
        return answers
+    
+    @staticmethod
+    def getExercisesFromLesson(lesson):
+        exercises = ExerciseMultipleOption.objects.filter(lessons=lesson)
+        return exercises
 
 
 class Exercise_options(models.Model):
@@ -27,22 +33,22 @@ class Exercise_options(models.Model):
     
     
 
-from student_registration.models import Student
+from user.models import CustomUser
 class Exercise_passed(models.Model):
     key = models.AutoField(primary_key=True)
     exercise = models.ForeignKey(ExerciseMultipleOption, on_delete = models.CASCADE, default=None)
-    student = models.ForeignKey(Student, on_delete = models.CASCADE)
+    CustomUser = models.ForeignKey(CustomUser, on_delete = models.CASCADE)
     class Meta:
-        unique_together = ('student', 'exercise')
+        unique_together = ('CustomUser', 'exercise')
 
     @staticmethod
-    def exercises_completed_by_student(student_email, nameCurso):
+    def exercises_completed_by_CustomUser(user, curso):
         query ="""SELECT ep.key, COUNT(ep.key) as total_exercise
                 FROM exercises_exercise_passed ep
                 INNER JOIN exercises_exercisemultipleoption ej ON ep.exercise_id = ej.id
                 INNER JOIN lessons_lesson l ON l.id = ej.lessons_id
-                WHERE l.course_id = %s and ep.student_id = %s"""
-        result = Exercise_passed.objects.raw(query, [nameCurso, student_email])
+                WHERE l.course_id = %s and ep.CustomUser_id = %s"""
+        result = Exercise_passed.objects.raw(query, [curso.id, user.ci])
         total = result[0].total_exercise 
         if result:
            pass
@@ -51,16 +57,15 @@ class Exercise_passed(models.Model):
         return total
     
     @staticmethod
-    def get_exercises_completed_by_student(student_ci):
-        print(type(student_ci), student_ci)
+    def get_exercises_completed_by_CustomUser(CustomUser_ci):
         query ="""SELECT ep.key
                 FROM exercises_exercise_passed ep
-                WHERE ep.student_id = %s"""
-        result = Exercise_passed.objects.raw(query, [student_ci])
+                WHERE ep.CustomUser_id = %s"""
+        result = Exercise_passed.objects.raw(query, [CustomUser_ci])
         exerciseMultioptionsPassed = []
         for e in result:
             exerciseMultioptionsPassed.append(e.exercise)
-        print(exerciseMultioptionsPassed)
+       # print(exerciseMultioptionsPassed)
         return exerciseMultioptionsPassed
 
 

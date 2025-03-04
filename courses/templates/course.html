@@ -1,0 +1,95 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}{{ course.name }} - Course{% endblock %}
+{% block estilo %} 
+<style>
+    .header-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .lessons-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        justify-content: start;
+    }
+
+    .lesson-card {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 5px;
+        width: 300px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .lesson-card h5 {
+        margin-bottom: 10px;
+    }
+
+    .lesson-card p, .lesson-card small {
+        margin-bottom: 5px;
+    }
+
+    .btn-sm {
+        font-size: 14px;
+        padding: 6px 10px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            {% if course.img %}
+                <img src="{{ course.img.url }}" class="img-fluid rounded" alt="{{ course.name }}">
+            {% else %}
+                <img src="{% static 'assets/img/default-course.jpg' %}" class="img-fluid rounded" alt="No Image Available">
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <h1>{{ course.name }}</h1>
+            <p><strong>Subject:</strong> {{ course.subject }}</p>
+            <p><strong>Difficulty:</strong> <span class="badge bg-primary">{{ course.difficulty }}</span></p>
+            <p><strong>Description:</strong> {{ course.description }}</p>
+            <p><strong>Created on:</strong> {{ course.creation_date|date:"F d, Y" }}</p>
+            {% if user == 'Teacher' %}
+                <a href="{% url 'editCourse' course.name %}" class="btn btn-warning mt-3">Edit Course</a>
+            {% endif %}
+        </div>
+    </div>
+    
+    <hr>
+    
+    <div class="container">
+        <!-- Header: Lessons + Create Lesson Button -->
+        <div class="header-container">
+            <h2 class="mt-4">Lessons</h2>
+            {% if user == 'Teacher' %}
+                <a href="{% url 'createLesson' course.name %}" class="btn btn-primary btn-sm">Create a Lesson</a>
+            {% endif %}
+        </div>
+    
+        <!-- Lessons Grid -->
+        <div class="lessons-container">
+            {% for lesson in lessons %}
+                <div class="lesson-card">
+                    <h5 class="mb-1">Lesson {{ lesson.order }}</h5>
+                    <p class="mb-1"><strong>Topic:</strong> {{ lesson.topic }}</p>
+                    <p class="mb-1"><strong>Goal:</strong> {{ lesson.goal }}</p>
+                    {% if lesson.numberOfExercises %}
+                    <small class="text-muted"><strong>Number of Exercises:</strong> {{ lesson.numberOfExercises }}</small>
+                    {% else %}
+                    <small class="text-muted"><strong>Number of Exercises:</strong> 0 </small>
+                    {% endif %}
+                    <a href="{% url 'lesson_exercises' lesson.id %}" class="btn btn-secondary btn-sm mt-2">Get into</a>
+                </div>
+            {% empty %}
+                <p class="text-muted">No lessons available for this course.</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -7,22 +7,24 @@
 
 {% block content %}
 <div class="course-title">
-  <h2>Courses</h2>
+  <h2>Courses For Students</h2>
 </div>
 
 <div id="content-courses">
   {% for course in courses %}
     <div class="course">
-      <img src="../../static/assets/brand/math.jpeg" alt="Curso 1">
+      <img src="{{ course.img.url }}" alt="Curso 1">
       <h2>{{course.name}}</h2>
       <p>Subject: {{course.subject}}</p>
       <p>Difficulty: {{course.dificulty}}</p>
       <p>Description: {{course.description}}</p>
+      {% if user == 'Student' %}
       <button id="{{course.name}}" method="post">Add to my courses</button>
+      {% endif %}
     </div>
     <script>
           document.getElementById("{{course.name}}").addEventListener('click', function() {
-          window.location.href = "{% url 'register_course' course.name%}";
+          window.location.href = "{% url 'register_course' course.name %}";
         });
     </script>
     {% endfor %}

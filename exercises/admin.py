@@ -16,7 +16,7 @@ class Exercise_optionsAdmin(admin.ModelAdmin):
     
 @admin.register(Exercise_passed)
 class Exercise_passedAdmin(admin.ModelAdmin):
-    list_display = ('student', 'exercise_id',)
+    list_display = ('CustomUser', 'exercise_id',)
 
     
     

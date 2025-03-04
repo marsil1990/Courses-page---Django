@@ -45,7 +45,10 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'lessons.apps.LessonsConfig',
     'exercises.apps.ExercisesConfig', 
-    'student_registration.apps.StudentRegistrationConfig',
+    'user',
+    'register',
+    'login',
+    'courses',
 ]
 
 MIDDLEWARE = [
@@ -140,12 +143,14 @@ MEDIA_URL = "/media/"
 
 LOGIN_URL = '/login/'
 
-AUTH_USER_MODEL = 'student_registration.Student'
+AUTH_USER_MODEL = 'user.CustomUser'
+
+
 
 # Especifica los backends de autenticación a utilizar
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # Utiliza el backend de autenticación predeterminado
-    'student_registration.backends.CustomStudentAuthBackend',  # Agrega tu propio backend de autenticación personalizado para el modelo Student
+    'login.backends.CustomUserAuthBackend',  # Agrega tu propio backend de autenticación personalizado para el modelo CustomUser
 ]
 
 PAYPAL_RECEIVER_EMAIL = config('PAYPAL_RECEIVER_EMAIL')

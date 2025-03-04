@@ -1,0 +1,44 @@
+{% extends 'base/base.html' %}
+{% block title %} Create Lesson {% endblock %}
+{% load static %}
+
+{% block estilo %} 
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .form-container h2 {
+        text-align: center;
+        color: #333;
+    }
+    .btn-submit {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+    .btn-submit:hover {
+        background: #0056b3;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Create Lesson</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn-submit">Create Lesson</button>
+    </form>
+</div>
+{% endblock %}

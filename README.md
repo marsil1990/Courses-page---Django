@@ -1,4 +1,4 @@
-It is a web page where courses with lessons and exercises are created. Students can register and purchase courses via PayPal.
+It is a web page where courses with lessons and exercises are created. CustomUsers can register and purchase courses via PayPal.
 This project is still under development.
 Steps to get the application running:
 - git clone https://github.com/marsil1990/Courses-page---Django.git

@@ -1,0 +1,51 @@
+
+{% extends 'base/base.html' %}
+{% block title %} Register {% endblock %}
+{% load static %}
+{% block estilo %}
+<link href="{% static 'assets/dist/css/home.css' %}" rel="stylesheet" >
+<style>
+  .delete {
+    display: flex;
+}
+ .btn-primary {
+    margin-left: auto; /* Empuja el botón completamente a la derecha */
+}
+</style>
+
+ {% endblock %}
+
+{% block content  %}
+<div class="course-title">
+  <h2>My Courses - Role: {{user}}</h2>
+  {% if user == "Teacher" %}
+  <div class="col-sm-12">
+    <a href="{% url 'create_course'  %}" class="btn btn-primary">Create a new Course</a>
+  </div>
+  {% endif %}
+</div>
+
+<div id="content-courses">
+    {% for course in courses %}
+      <div class="course">
+        {% if user == "Teacher" %}
+        <div class="delete">
+          <a href="{% url 'delete_course' course.name %}" class="btn btn-primary">Delete Course</a>
+        </div>
+        {% endif %}
+       
+        <img src="{{ course.img.url }}" alt="Curso 1">
+        <h2>{{course.name}}</h2>
+        <p>Subject: {{course.subject}}</p>
+        <p>Difficulty: {{course.difficulty}}</p>
+        <p>Description: {{course.description}}</p>
+        <button id="{{course.name}}"> Get into </button>
+      </div>
+      <script>
+            document.getElementById("{{course.name}}").addEventListener('click', function() {
+            window.location.href = "{% url 'course' course.name %}";
+          });
+      </script>
+      
+      {% endfor %}
+{% endblock %}

@@ -34,3 +34,38 @@
 .registration-form button[type="submit"]:hover {
     background-color: #45a049;
 }
+
+.registration-form select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;  /* Aumenta el espacio entre los campos */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease; /* Transición suave */
+}
+
+.registration-form select:focus {
+    border-color: #4CAF50; /* Cambia el color del borde cuando el campo está en foco */
+    outline: none;
+}
+
+.registration-form select {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    appearance: none;  /* Elimina los estilos predeterminados del navegador */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+}
+
+.registration-form select:hover {
+    border-color: #45a049; /* Cambio de borde en hover */
+}
+
+.registration-form select:focus {
+    border-color: #4CAF50; /* Color de borde en el enfoque */
+    outline: none;
+}

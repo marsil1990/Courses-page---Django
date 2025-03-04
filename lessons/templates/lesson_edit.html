@@ -1,0 +1,71 @@
+{% extends 'base/base.html' %}
+{% block title %} Edit Lesson {% endblock %}
+{% load static %}
+
+{% block estilo %} 
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .form-container h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+    }
+    .form-group label {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    .btn-submit {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        margin-top: 10px;
+    }
+    .btn-submit:hover {
+        background: #0056b3;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Edit Lesson</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_order">Lesson Number</label>
+            {{ form.order }}
+        </div>
+        <div class="form-group">
+            <label for="id_goal">Goal</label>
+            {{ form.goal }}
+        </div>
+        <div class="form-group">
+            <label for="id_topic">Topic</label>
+            {{ form.topic }}
+        </div>
+        <div class="form-group">
+            <label for="id_url_video">Video URL</label>
+            {{ form.url_video }}
+        </div>
+        
+        <button type="submit" class="btn-submit">Save Changes</button>
+    </form>
+</div>
+{% endblock %}

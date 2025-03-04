@@ -1,9 +1,7 @@
-.container.footer{
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    left: 0;
-  }
+.container.footer {
+  position: relative; /* Permite que el footer se mueva con el contenido */
+  bottom: auto;
+}
   .bd-placeholder-img {
     font-size: 1.125rem;
     text-anchor: middle;

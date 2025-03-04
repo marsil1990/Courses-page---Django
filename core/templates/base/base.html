@@ -132,12 +132,11 @@
         <li><a href="{% url 'home' %}" class="nav-link px-2 link-secondary">Home</a></li>
         <li><a href="{% url 'myCourses' %}" class="nav-link px-2">My Courses</a></li>
         <li><a href="{% url 'profile' %}" class="nav-link px-2">Profile</a></li>
-        <li><a href="#" class="nav-link px-2">FAQs</a></li>
         <li><a href="#" class="nav-link px-2">About me</a></li>
       </ul>
 
       <div class="col-md-3 text-end">
-        {% if user_active == False %}
+        {% if user != "Student" and user != "Teacher" %}
         <button id="login" type="button" class="btn btn-outline-primary me-2">Login</button>
         <button id="register" type="button" class="btn btn-primary">Sign-up</button>
         <script>

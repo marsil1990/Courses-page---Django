@@ -25,8 +25,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     #course_core
     path('', include('core.urls')),
-    #student_register
-    path('', include('student_registration.urls')),
+    #CustomUser_register
+    path('', include('user.urls')),
     # lessons
     path('', include('lessons.urls')),
     #Exercises
@@ -35,7 +35,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     #paypal
     path('',include('paypal.standard.ipn.urls')),
-    
-
+    #register
+    path('',include('register.urls')),
+    #login
+    path('', include('login.urls')),
+    #courses
+     path('', include('courses.urls'))
 ]+ static(settings.STATIC_URL, document_root = settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

@@ -1,0 +1,113 @@
+{% extends 'base/base.html' %}
+{% block title %} Profile {% endblock %}
+{% load static %}
+{% block estilo %} 
+<style>
+  .edit {
+    display: flex;
+}
+ .btn-primary {
+    margin-left: auto; /* Empuja el botón completamente a la derecha */
+}
+</style>
+{% endblock %} 
+
+{% block content %}
+<section style="background-color: #eee;">
+    <div class="container py-5">
+      <div class="row">
+      </div>
+  
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="card mb-4">
+            <div class="card-body text-center">
+              <div class="edit">
+                <a href="{% url 'editProfile' %}" class="btn btn-primary">Edit Profile</a>
+              </div>
+              <img src="{{ user_img.url }}" 
+                class="rounded-circle img-fluid" style="width: 150px;">
+              <h5 class="my-3">{{first_name}} {{last_name}}</h5>
+              <p class="text-muted mb-1">{{country}}</p>
+              
+            </div>
+          </div>
+          <div class="card mb-4 mb-lg-0">
+            <div class="card-body p-0">
+              <ul class="list-group list-group-flush rounded-3">
+                {% for sn in networks %}
+                  <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                    <div class="d-flex align-items-center">
+                      <i class="fas fa-globe fa-lg text-warning me-3"></i>
+                      <div>
+                        <p class="mb-1 fw-bold">{{ sn.0 }}</p>
+                        <p class="mb-0 text-muted"><a href="{{ sn.1 }}" target="_blank" class="text-decoration-none">{{ sn.1 }}</a></p>
+                      </div>
+                    </div>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Full Name</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{first_name}} {{last_name}}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Email</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{email}}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Phone</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ phone }}</p>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="card mb-4 mb-md-0">
+                <div class="card-body">
+                  <p class="mb-4"><span class="text-primary font-italic me-1">My</span> Courses
+                  </p>
+                  {% if user == 'Student' %}
+                  {% for nameCurse, percentage in courses_progress.items %}
+                  <p class="mb-1" style="font-size: .77rem;">{{nameCurse}}</p>
+                  <div class="progress rounded" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" style="width: {{ percentage }}%" aria-valuenow="80"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  {% endfor  %}      
+                  {% else %}
+                  {% for course in courses_progress %}
+                  <h5>{{course.name}}</h5>
+                  {% endfor %}
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}

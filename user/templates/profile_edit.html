@@ -1,0 +1,280 @@
+{% extends 'base/base.html' %}
+{% block title %} Profile {% endblock %}
+{% load static %}
+{% block estilo %} 
+<style>
+  .edit {
+    display: flex;
+}
+ .btn-primary {
+    margin-left: auto; /* Empuja el botón completamente a la derecha */
+}
+</style>
+{% endblock %} 
+
+{% block content %}
+<section style="background-color: #eee;">
+    <div class="container py-5">
+      <div class="row">
+      </div>
+  
+      <div class="row">
+        <div class="col-lg-4">
+          <form method="post" enctype="multipart/form-data" >
+            {% csrf_token %}
+          <div class="card mb-4">
+            <div class="card-body text-center">
+              {% if user_img %}
+              <img src="{{ user_img.url }}" alt="avatar"class="rounded-circle img-fluid" style="width: 150px;">
+              {% endif %}
+              {{ form.img_user}}
+              <h5 class="my-3">{{first_name}} {{last_name}}</h5>
+              <h6>Country: </h6>
+              <p class="text-muted mb-1">{{ country }}</p>
+              <div id="options-container-2">
+                <div class ="option-group">
+                  <input type="text" name="option-country" class="form-control option-input" placeholder="Edit">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card mb-4 mb-lg-0">
+            <div class="card-body p-0">
+              <ul class="list-group list-group-flush rounded-3">
+                {% for sn in networks %}
+                <li class="list-group-item d-flex flex-column p-3">
+                  <div class="d-flex align-items-center mb-2">
+                    <i class="fas fa-globe fa-lg text-warning me-3"></i>
+                    <strong class="me-2">{{ sn.0  }}</strong>
+                  </div>
+            
+                  <div class="mb-2">
+                    <label class="form-label mb-1">Edit Name:</label>
+                    <input type="text" name="option-social-name[]" class="form-control" placeholder="Edit name" value="{{ sn.0 }}">
+                  </div>
+            
+                  <div class="mb-2">
+                    <label class="form-label mb-1">Edit URL:</label>
+                    <input type="url" name="option-social-url[]" class="form-control" placeholder="Edit URL" value="{{ sn.1 }}">
+                  </div>
+            
+                  <p class="text-muted mb-0">
+                    <a href="{{ sn.1 }}" target="_blank" class="text-decoration-none">{{ sn.1 }}</a>
+                  </p>
+                </li>
+                {% endfor %}
+              
+                <button  type="button" class="btn  btn-secondary btn-sm" id="add-social-network">Add a Social Network</button>
+                <div id = "container-socialNetwork">
+
+                </div>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Full Name</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{first_name}} {{last_name}}</p>
+                  <div id="options-container-4">
+                    <div class ="option-group">
+                      <input type="text" name="option-fullName" class="form-control option-input" placeholder="Edit">
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Email</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{email}}</p>
+                  <div id="options-container-5">
+                    <div class ="option-group">
+                      <input type="email" name="option-email" class="form-control option-input" placeholder="Edit">
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Phone</p>
+                  
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{phone}}</p>
+                  <div id="options-container-6">
+                    <div class ="option-group">
+                      <input type="number" name="option-phone" class="form-control option-input" placeholder="Edit">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="card mb-4 mb-md-0">
+                <div class="card-body " >
+                  <p class="mb-4"><span class="text-primary font-italic me-1">My</span> Courses
+                  </p>
+                  {% for nameCourse, percentage in courses.items %}
+                  <div class="course-item" data-course-id="{{ nameCourse }}" >
+                  <p class="mb-1" style="font-size: .77rem;">{{nameCourse}}</p>
+                  <div class="progress rounded" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" style="width: {{ percentage }}%" aria-valuenow="80"
+                      aria-valuemin="0" aria-valuemax="100">
+                      </div>
+                  </div>
+
+                  <button type="button" name="option-course" id="remove-social-network" class="btn btn-danger btn-sm remove-course" >Remove</button>
+                 
+                 </div>
+                 <input type="hidden" name="deleted_courses" id="deleted-courses">
+                  {% endfor  %}      
+                  
+                </div>
+                
+              </div>
+              
+            </div>
+            
+          </div>
+          
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">Save</button>
+        </form>
+      </div>
+    </div>
+
+  </section>
+
+  <script>
+   
+    document.addEventListener("DOMContentLoaded", function() {
+        const container_socialNetwork = document.getElementById("container-socialNetwork")
+        const edit_btn = document.getElementById("add-social-network");
+        
+        // Agregar una nueva opción
+        edit_btn.addEventListener("click", function() {
+              const optionDiv = document.createElement("div");
+              optionDiv.classList.add("option-group");
+              optionDiv.innerHTML = `
+              <div class ="option-group">
+                <input type="text" name="option-social-name[]" class="form-control option-input" placeholder="Name">
+                <input type="url" name="option-social-url[]" class="form-control option-input" placeholder="Url">
+              </div>
+            `;
+              
+              container_socialNetwork.appendChild(optionDiv)
+              
+        });
+       
+        let removedCourses = [];
+
+    document.querySelectorAll(".remove-course").forEach((button) => {
+        button.addEventListener("click", function () {
+            let courseItem = this.closest(".course-item");
+            if (!courseItem) return;
+            let courseId = courseItem.getAttribute("data-course-id");
+            
+            // Agregar el curso eliminado al array
+            if (!removedCourses.includes(courseId)) { 
+                removedCourses.push(courseId);
+            }
+
+            // Actualizar el input oculto con los IDs eliminados
+            document.getElementById("deleted-courses").value = JSON.stringify(removedCourses);
+
+            // Eliminar visualmente el curso
+            courseItem.remove();
+        });
+    });
+});
+
+        
+    
+      /*
+    📌 Explicación Profunda Paso a Paso
+    
+    1️⃣ DOMContentLoaded:
+    document.addEventListener("DOMContentLoaded", function() {...});
+    - Este código espera a que la página esté completamente cargada antes de ejecutar la función.
+    - El evento "DOMContentLoaded" se dispara cuando el HTML ha sido completamente cargado y parseado, antes de que se carguen imágenes y estilos.
+    - Evita errores que ocurren si el script se ejecuta antes de que los elementos del DOM existan.
+    
+    📌 Ejemplo de por qué es necesario:
+    Si el código intentara seleccionar document.getElementById("options-container") antes de que el HTML estuviera listo, fallaría con null o undefined.
+    
+    2️⃣ Seleccionar elementos del DOM
+    const optionsContainer = document.getElementById("options-container"); // Obtiene el contenedor donde se agregarán las opciones.
+    const addOptionBtn = document.getElementById("add-option"); // Obtiene el botón que agregará nuevas opciones al formulario.
+    
+    📌 Ejemplo:
+    Si el HTML tiene esto:
+    <div id="options-container"></div>
+    <button id="add-option">Add Option</button>
+    
+    El código guarda referencias a estos elementos para manipularlos después.
+    
+    3️⃣ Agregar Evento al Botón ("Add Option")
+    addOptionBtn.addEventListener("click", function() {...});
+    - Detecta cuando el usuario hace clic en el botón "Add Option".
+    - Ejecuta la función interna cada vez que el botón es presionado.
+    
+    📌 ¿Por qué usamos addEventListener en lugar de onclick?
+    - Permite agregar múltiples eventos sin sobrescribirlos.
+    - Es más flexible y mantenible en aplicaciones grandes.
+    
+    4️⃣ Crear un Nuevo div para la Opción
+    const optionDiv = document.createElement("div");
+    optionDiv.classList.add("option-group");
+    - document.createElement("div") crea un nuevo <div> dinámicamente en JavaScript.
+    - optionDiv.classList.add("option-group") le añade una clase CSS para estilizarlo.
+    
+    5️⃣ Insertar Código HTML Dentro del div
+    optionDiv.innerHTML = `
+        <input type="text" name="options[]" class="form-control option-input" placeholder="Enter an option">
+        <button type="button" class="btn btn-danger btn-sm remove-option">Remove</button>
+    `;
+    - .innerHTML = ... agrega contenido HTML dentro del div recién creado.
+    - Se añaden:
+        - Un campo de entrada (<input>) para que el usuario escriba la opción.
+        - Un botón (<button>) para eliminar la opción.
+    
+    📌 ¿Por qué usamos innerHTML en lugar de appendChild?
+    - innerHTML es más rápido cuando necesitamos agregar múltiples elementos a la vez.
+    - appendChild() se usa cuando queremos agregar elementos uno por uno.
+    
+    6️⃣ Agregar el div al Contenedor
+    optionsContainer.appendChild(optionDiv);
+    - Inserta el nuevo div dentro del options-container.
+    - El usuario ve la nueva opción en pantalla inmediatamente.
+    
+    7️⃣ Detectar Clics en "Remove" y Eliminar la Opción
+    optionsContainer.addEventListener("click", function(event) {
+        if (event.target.classList.contains("remove-option")) {
+            event.target.parentElement.remove();
+        }
+    });
+    - Escucha clicks en todo el options-container.
+    - Es más eficiente que agregar un addEventListener a cada botón individualmente.
+    
+    📌 Ejemplo:
+    1️⃣ El usuario hace clic en el botón "Remove".
+    2️⃣ event.target es el botón en el que se hizo clic.
+    3️⃣ event.target.parentElement.remove(); elimina el div padre que contiene el campo y el botón.
+    */
+</script>
+
+{% endblock %}

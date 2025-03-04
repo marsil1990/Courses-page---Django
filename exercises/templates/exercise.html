@@ -1,30 +1,106 @@
 {% extends 'base/base.html' %}
-{% block title %} Course name -Lessons {% endblock %}
+{% block title %} Exercise {% endblock %}
 {% load static %}
+
 {% block estilo %} 
-<link href="{% static 'assets/dist/css/lesson_exercises.css' %}" rel="stylesheet" >
-{% endblock %} 
+<style>
+    .exercise-container {
+        max-width: 600px;
+        margin: auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .exercise-container h2 {
+        text-align: center;
+        color: #333;
+    }
+    .options-list {
+        list-style: none;
+        padding: 0;
+    }
+    .options-list li {
+        margin-bottom: 10px;
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .btn-submit {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+    .btn-submit:hover {
+        background: #0056b3;
+    }
+    .btn-edit {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        margin-top: 10px;
+        text-align: center;
+        text-decoration: none;
+    }
+    .btn-delete {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background: red;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        margin-top: 10px;
+        text-align: center;
+        text-decoration: none;
+    }
+    .btn-edit:hover {
+        background: #218838;
+    }
+</style>
+{% endblock %}
 
-<!-- Div that contains lesson details -->
 {% block content %}
+<div class="exercise-container">
+    <h2>{{ exercise.description }}</h2>
 
-
-<!-- Div that contains exercises for the lesson -->
-<div class="exercises-container">
-    <!-- Iterating over exercises -->
-    <div class="exercise">
-        <p class="exercise-description">{{ exercise.description }}</p>
-        <p>{{ exercise.phrase_multiple_option}}</p>
-        {% for answer in answers %}
-        <p>{{ answer.answer_option }}</p>
-        {% endfor %}
-        <form class = "registration-form" method="post">
-            {% csrf_token %}
-            {{ do_an_exercise.as_p }}
-        <button type="submit">Submit Response</button>
-     </form>
-    </div>
-    <h2>{{reply}}</h2>
+    <h3>{{ exercise.phrase_multiple_option }}</h3>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <ul class="options-list">
+            {% for option in exercise.options.all %}
+                <li>
+                    <label>
+                        <input type="radio" name="selected_option" value="{{ option.answer_option }}">
+                        {{ option.answer_option }}
+                    </label>
+                </li>
+            {% endfor %}
+        </ul>
+        
+        <button type="submit" class="btn-submit">Submit Answer</button>
+        {% if message %}
+           <p>{{ message }}</p>
+        {% endif %}
+    </form>
+    
+    {% if user == 'Teacher' %}
+    <a href="{% url 'exercise_edit' exercise.id %}" class="btn-edit">Edit Exercise</a>
+    <a href="{% url 'delete_exercise' exercise.id %}" class="btn-delete">Delete Exercise</a>
+    {% endif %}
 </div>
-
 {% endblock %}

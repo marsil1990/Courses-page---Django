@@ -1,61 +1,94 @@
 from django.shortcuts import render, redirect
-from lessons.models import Lesson
-from .models import ExerciseMultipleOption,Exercise_passed
-from student_registration.models import Student, Register
+from .models import ExerciseMultipleOption, Exercise_options, Exercise_passed
+from courses.repositories.course_repository import CourseRepository
+from user.repoisitoriesUser.user_repository import UserRepository
+from courses.models import Course
+from user.models import CustomUser
+from register.models import RegisterCourse
 from django.contrib.auth.decorators import login_required
-from .form_do_exercise import Do_exercise_to_complete_Form, Do_exercise_to_MultipleOption_Form
+from .form_do_exercise import Do_exercise_to_MultipleOption_Form
+from exercises.exerciseForm import ExerciseForm
 from django.http import HttpResponseForbidden
 # Create your views here.
-@login_required(login_url='/login/')
-def lesson_exercises(request, id):
-    lesson = Lesson.objects.get(id = id)
-    exercises = None
-    exercises = []
-    try: 
-        get_exercises = ExerciseMultipleOption.objects.filter(lessons = id)
-        exercises_passed = Exercise_passed.get_exercises_completed_by_student(student_ci=request.user.ci)
-        for e in get_exercises:
-            if e in exercises_passed:
-                exercises.append({'exercise':e,'approved':True})
-            else: exercises.append({'exercise':e,'approved':False})
-    except:
-        print("The table does not exist")
-       
-
-    return render(request, 'lesson_exercises.html', {'lesson':lesson, 'exercises': exercises})
 
 
 @login_required(login_url='/login/')
-def start_exercise(request, id):
-    answers =[]
-    reply = "Try until you find the correct answer"
-    exercise = ExerciseMultipleOption.objects.get(id = id)
-    answers = exercise.answers()
-    if request.method == 'POST':
-        do_an_exercise = Do_exercise_to_MultipleOption_Form(request.POST)
-        if do_an_exercise.is_valid():
-            answer = do_an_exercise.cleaned_data['enter_the_correct_option']
-            if exercise.answer_correct_multiOption.lower() == answer[0].lower() :
-                reply = "You were correct, congratulation!"
-                student = Student.objects.get(email = request.user)
-                if not Exercise_passed.objects.filter(exercise=exercise, student=student):
-                    exercise_passed = Exercise_passed(exercise = exercise, student = student)
-                    exercise_passed.save() 
-                    course = exercise.lessons.course
-                    numberOfexercise = course.number_exercises_course()
-                    numberOfexercisePassed = Exercise_passed.exercises_completed_by_student(student_email=student.ci, nameCurso=course.name)
-                    print(numberOfexercise,"yyy", numberOfexercisePassed)
-                    if numberOfexercise == numberOfexercisePassed:
-                        register_student_course = Register.objects.get(student=student, course=course)
-                        register_student_course.aprove = True
-                        register_student_course.save()
-                    else:
-                        register_student_course = Register.objects.get(student=student, course=course)
-                        register_student_course.aprove = False
-                        register_student_course.save()
-    else: 
-        do_an_exercise = Do_exercise_to_MultipleOption_Form()
-                        
-    return render(request, 'exercise.html',{'exercise':exercise, 'do_an_exercise':do_an_exercise, 'answers':answers,'reply':reply})
-
+def exercise(request, id):
+    exercise = ExerciseMultipleOption.objects.get(id=id)
+    if request.user.role == "Teacher":
+        if request.method == 'POST':
+            option = request.POST.get('selected_option')
+            option = option.split("-")[0]
+            if option == exercise.answer_correct_multiOption:
+                message = "✅ Correct answer!"
+            else:
+                message = "❌ Incorrect answer. Try again!"
+            return render(request, "exercise.html", {"exercise": exercise, "message": message, 'user':request.user.role})
+    elif request.user.role == "Student":
+        if request.method == 'POST':
+            option = request.POST.get('selected_option')
+            option = option.split("-")[0]
+            if option == exercise.answer_correct_multiOption:
+                message = "✅ Correct answer!"
+                student = UserRepository.getUser(request.user.email, request.user.role)
+                Exercise_passed.objects.create(exercise = exercise, CustomUser = student)
+                course = exercise.lessons.course
+                total_exercises = CourseRepository.number_exercises_course(course)
+                if total_exercises == Exercise_passed.exercises_completed_by_CustomUser(student, course):
+                    r = RegisterCourse.objects.get(course=course, student = student)
+                    r.aprove = True
+                    r.save()
+            else:
+                message = "❌ Incorrect answer. Try again!"
+            return render(request, "exercise.html", {"exercise": exercise, "message": message, 'user':request.user.role})
         
+        
+    return render(request, 'exercise.html', {'exercise':exercise, 'user':request.user.role})
+
+
+@login_required(login_url='/login/')
+def create_exercise(request, id_lesson):
+    user = request.user.role
+    if request.method == "POST":
+        form = ExerciseForm(request.POST)
+        if form.is_valid():
+            exercise = form.save(id_lesson)
+            options = request.POST.getlist("options[]")  # Obtiene todas las opciones ingresadas
+            for option_text in options:
+                if option_text.strip():  # Evita opciones vacías
+                    print(option_text)
+                    Exercise_options.objects.create(exerciseMultipleOption=exercise, answer_option=option_text)
+
+            return redirect("myCourses")
+    else:
+        form = ExerciseForm()
+    
+    return render(request, 'create_exercise.html', {"form":form, "user":user})
+
+def exercise_edit(request, id_exercise):
+    exercise =  ExerciseMultipleOption.objects.get(id=id_exercise)
+    lesson = exercise.lessons
+    option_exercise = Exercise_options.objects.filter( exerciseMultipleOption=exercise)
+    if request.method == "POST":
+        form = ExerciseForm(request.POST, instance = exercise)
+        if form.is_valid():
+            Exercise_options.objects.filter( exerciseMultipleOption = exercise).delete()
+            options = request.POST.getlist("options[]")  # Obtiene todas las opciones ingresadas
+            for option_text in options:
+                if option_text.strip():  # Evita opciones vacías
+                    print(option_text)
+                    Exercise_options.objects.create(exerciseMultipleOption=exercise, answer_option=option_text)
+            form.save(lesson)
+            return redirect('exercise', id_exercise)
+    else:
+        form = ExerciseForm(instance=exercise)
+
+    return render(request, "exercise_edit.html", {"form": form, "options":option_exercise})
+
+def delete_exercise(reuqest, id_exercise):
+    exercise = ExerciseMultipleOption.objects.get(id =id_exercise)
+    lesson = exercise.lessons
+    lesson.numberOfExercises = lesson.numberOfExercises - 1
+    lesson.save()
+    exercise.delete()
+    return redirect("myCourses")

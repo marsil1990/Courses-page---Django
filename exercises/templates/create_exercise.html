@@ -1,0 +1,196 @@
+{% extends 'base/base.html' %}
+{% block title %} Create Exercise {% endblock %}
+{% load static %}
+
+{% block estilo %} 
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .form-container h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+    .btn-submit {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        margin-top: 10px;
+    }
+    .btn-submit:hover {
+        background: #0056b3;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Create Exercise</h2>
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="id_description">Description</label>
+            {{ form.description }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_url_video">Video URL (Optional)</label>
+            {{ form.url_video }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_phrase_multiple_option">Phrase for Multiple Option</label>
+            {{ form.phrase_multiple_option }}
+        </div>
+
+        
+
+        <!-- Contenedor para las opciones -->
+        <div class="form-group">
+            <label>Options:</label>
+            <div id="options-container">
+                <div class="option-group">
+                    <h3>Enter the option in the next way</h3>
+                    <h4>1 - here an answer </h4>
+                    <h4>2 - here an answer </h4>
+                    <input type="text" name="options[]" class="form-control option-input" placeholder="Enter an option">
+                    <button type="button" class="btn btn-danger btn-sm remove-option">Remove</button>
+                </div>
+            </div>
+            <button type="button" id="add-option" class="btn btn-success btn-sm mt-2">Add Option</button>
+        </div>
+
+        <div class="form-group">
+            <label for="id_answer_correct_multiOption">Correct Answer, please, only enter the option's number</label>
+            {{ form.answer_correct_multiOption }}
+        </div>
+
+        <button type="submit" class="btn-submit">Create Exercise</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const optionsContainer = document.getElementById("options-container");
+        const addOptionBtn = document.getElementById("add-option");
+
+        // Agregar una nueva opción
+        addOptionBtn.addEventListener("click", function() {
+            const optionDiv = document.createElement("div");
+            optionDiv.classList.add("option-group");
+            optionDiv.innerHTML = `
+                <input type="text" name="options[]" class="form-control option-input" placeholder="Enter an option">
+                <button type="button" class="btn btn-danger btn-sm remove-option">Remove</button>
+            `;
+            optionsContainer.appendChild(optionDiv);
+        });
+
+        // Eliminar opción al hacer clic en "Remove"
+        optionsContainer.addEventListener("click", function(event) {
+            if (event.target.classList.contains("remove-option")) {
+                event.target.parentElement.remove();
+            }
+        });
+    });
+     /*
+    📌 Explicación Profunda Paso a Paso
+    
+    1️⃣ DOMContentLoaded:
+    document.addEventListener("DOMContentLoaded", function() {...});
+    - Este código espera a que la página esté completamente cargada antes de ejecutar la función.
+    - El evento "DOMContentLoaded" se dispara cuando el HTML ha sido completamente cargado y parseado, antes de que se carguen imágenes y estilos.
+    - Evita errores que ocurren si el script se ejecuta antes de que los elementos del DOM existan.
+    
+    📌 Ejemplo de por qué es necesario:
+    Si el código intentara seleccionar document.getElementById("options-container") antes de que el HTML estuviera listo, fallaría con null o undefined.
+    
+    2️⃣ Seleccionar elementos del DOM
+    const optionsContainer = document.getElementById("options-container"); // Obtiene el contenedor donde se agregarán las opciones.
+    const addOptionBtn = document.getElementById("add-option"); // Obtiene el botón que agregará nuevas opciones al formulario.
+    
+    📌 Ejemplo:
+    Si el HTML tiene esto:
+    <div id="options-container"></div>
+    <button id="add-option">Add Option</button>
+    
+    El código guarda referencias a estos elementos para manipularlos después.
+    
+    3️⃣ Agregar Evento al Botón ("Add Option")
+    addOptionBtn.addEventListener("click", function() {...});
+    - Detecta cuando el usuario hace clic en el botón "Add Option".
+    - Ejecuta la función interna cada vez que el botón es presionado.
+    
+    📌 ¿Por qué usamos addEventListener en lugar de onclick?
+    - Permite agregar múltiples eventos sin sobrescribirlos.
+    - Es más flexible y mantenible en aplicaciones grandes.
+    
+    4️⃣ Crear un Nuevo div para la Opción
+    const optionDiv = document.createElement("div");
+    optionDiv.classList.add("option-group");
+    - document.createElement("div") crea un nuevo <div> dinámicamente en JavaScript.
+    - optionDiv.classList.add("option-group") le añade una clase CSS para estilizarlo.
+    
+    5️⃣ Insertar Código HTML Dentro del div
+    optionDiv.innerHTML = `
+        <input type="text" name="options[]" class="form-control option-input" placeholder="Enter an option">
+        <button type="button" class="btn btn-danger btn-sm remove-option">Remove</button>
+    `;
+    - .innerHTML = ... agrega contenido HTML dentro del div recién creado.
+    - Se añaden:
+        - Un campo de entrada (<input>) para que el usuario escriba la opción.
+        - Un botón (<button>) para eliminar la opción.
+    
+    📌 ¿Por qué usamos innerHTML en lugar de appendChild?
+    - innerHTML es más rápido cuando necesitamos agregar múltiples elementos a la vez.
+    - appendChild() se usa cuando queremos agregar elementos uno por uno.
+    
+    6️⃣ Agregar el div al Contenedor
+    optionsContainer.appendChild(optionDiv);
+    - Inserta el nuevo div dentro del options-container.
+    - El usuario ve la nueva opción en pantalla inmediatamente.
+    
+    7️⃣ Detectar Clics en "Remove" y Eliminar la Opción
+    optionsContainer.addEventListener("click", function(event) {
+        if (event.target.classList.contains("remove-option")) {
+            event.target.parentElement.remove();
+        }
+    });
+    - Escucha clicks en todo el options-container.
+    - Es más eficiente que agregar un addEventListener a cada botón individualmente.
+    
+    📌 Ejemplo:
+    1️⃣ El usuario hace clic en el botón "Remove".
+    2️⃣ event.target es el botón en el que se hizo clic.
+    3️⃣ event.target.parentElement.remove(); elimina el div padre que contiene el campo y el botón.
+    */
+</script>
+{% endblock %}

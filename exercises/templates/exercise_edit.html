@@ -1,0 +1,123 @@
+{% extends 'base/base.html' %}
+{% block title %} Edit Exercise {% endblock %}
+{% load static %}
+
+{% block estilo %} 
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .form-container h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+    }
+    .form-group label {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    .btn-submit {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        margin-top: 10px;
+    }
+    .btn-submit:hover {
+        background: #0056b3;
+    }
+    .options-container {
+        margin-top: 20px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background: #f9f9f9;
+    }
+    .option-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    .option-group input {
+        flex: 1;
+        margin-right: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Edit Exercise</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_description">Description</label>
+            {{ form.description }}
+        </div>
+        <div class="form-group">
+            <label for="id_url_video">Video URL (Optional)</label>
+            {{ form.url_video }}
+        </div>
+        <div class="form-group">
+            <label for="id_phrase_multiple_option">Phrase for Multiple Option</label>
+            {{ form.phrase_multiple_option }}
+        </div>
+        <div class="form-group">
+            <label for="id_answer_correct_multiOption">Correct Answer</label>
+            {{ form.answer_correct_multiOption }}
+        </div>
+        
+        <div class="options-container" id="options-container">
+            <label>Options:</label>
+            {% for option in options %}
+            <div class="option-group">
+                <input type="text" name="options[]" class="form-control option-input" value="{{ option.answer_option }}" placeholder="{{ option.answer_option }}">
+                <button type="button" class="btn btn-danger btn-sm remove-option">Remove</button>
+            </div>
+            {% endfor %}
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm mt-2" id="add-option">Add Option</button>
+        
+        <button type="submit" class="btn-submit">Save Changes</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const optionsContainer = document.getElementById("options-container");
+        const addOptionBtn = document.getElementById("add-option");
+
+        addOptionBtn.addEventListener("click", function() {
+            const optionDiv = document.createElement("div");
+            optionDiv.classList.add("option-group");
+            optionDiv.innerHTML = `
+                <input type="text" name="options[]" class="form-control option-input" placeholder="Enter an option">
+                <button type="button" class="btn btn-danger btn-sm remove-option">Remove</button>
+            `;
+            optionsContainer.appendChild(optionDiv);
+        });
+
+        optionsContainer.addEventListener("click", function(event) {
+            if (event.target.classList.contains("remove-option")) {
+                event.target.parentElement.remove();
+            }
+        });
+    });
+</script>
+{% endblock %}
+
+
