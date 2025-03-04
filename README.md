@@ -1,88 +1,78 @@
-It is a web page where courses with lessons and exercises are created. CustomUsers can register and purchase courses via PayPal.
-This project is still under development.
-Steps to get the application running:
-- git clone https://github.com/marsil1990/Courses-page---Django.git
-- cd Courses-page---Django
-- python -m venv myenv
-(windows)
-- myenv\Scripts\activate
-(linux or Mac)
-- source myenv/bin/activate 
-- pip install -r requirements.txt
+🌍 Plataforma de Cursos - En Construcción
 
-Add the .env file with the following environment variables, replacing the placeholder values with the necessary information:
+📌 Descripción (Español)
 
-SECRET_KEY=''
+Esta es una plataforma educativa donde los profesores pueden registrarse, crear cursos con lecciones y ejercicios, y los estudiantes pueden inscribirse, completar ejercicios y finalizar los cursos.
 
-DEBUG=True
+🚧 El proyecto está en desarrollo. Algunas funcionalidades pueden no estar completamente implementadas.
 
-ALLOWED_HOSTS=''
+🌍 Courses Platform - Under Construction
 
-DATABASE_URL=sqlite:///db.sqlite3
+📌 Description (English)
 
-EMAIL_HOST=smtp.gmail.com
+This is an educational platform where teachers can register, create courses with lessons and exercises, and students can enroll, complete exercises, and finish courses.
 
-EMAIL_PORT=587
+🚧 This project is still in development. Some features may not be fully implemented.
 
-EMAIL_HOST_USER=your_email@gmail.com
+📥 Instalación / Installation
 
-EMAIL_HOST_PASSWORD=your_password
+Clonar el repositorio / Clone the repository:
 
-EMAIL_USE_TLS=True
+git clone https://github.com/tu_usuario/tu_repositorio.git
+cd tu_repositorio
 
-PAYPAL_RECEIVER_EMAIL=''
+Crear un entorno virtual / Create a virtual environment:
 
-PAYPAL_TEST=True
+python -m venv venv
+source venv/bin/activate  # En Windows: venv\Scripts\activate
 
-PAYPAL_BUY_BUTTON_IMAGE=''
+Instalar dependencias / Install dependencies:
 
-- python manage.py makemigrations
-- python manage.py migrate
-- python manage.py createsuperuser
-- python manage.py runserver
+pip install -r requirements.txt
 
------------------------------------------------------------------------------------------------------------------------------------------------------------
-Es una pagina web, donde se crean cursos, con lecciones y ejercicios. Los estudiantes se pueden registrar y comprar los cursos mediante paypal.
-Este proyecto aún esta en creación.
-Pasos para que la aplicación funcione:
-- git clone https://github.com/marsil1990/Courses-page---Django.git
-- cd Courses-page---Django
-- python -m venv myenv
-(windows)
-- myenv\Scripts\activate
-(linux o Mac)
-- source myenv/bin/activate 
-- source myenv/bin/activate
-- pip install -r requirements.txt
-Agrega el archivo .env con los siguientes variables de ambiente y con los datos que sean necesarios en lugar de la comillas:
-SECRET_KEY=''
+Configurar variables de entorno / Configure environment variables:
 
-DEBUG=True
+Renombra el archivo .env.example a .env y configura los valores necesarios.
 
-ALLOWED_HOSTS= ""
+Realizar migraciones / Run migrations:
 
-DATABASE_URL=sqlite:///db.sqlite3
+python manage.py migrate
 
-EMAIL_HOST=smtp.gmail.com
+Ejecutar el servidor / Run the server:
 
-EMAIL_PORT=587
+python manage.py runserver
 
-EMAIL_HOST_USER=tu_email@gmail.com
+🛠 Uso / Usage
 
-EMAIL_HOST_PASSWORD=tu_contraseña
+Accede al panel de administración / Access the admin panel:
 
-EMAIL_USE_TLS=True
+http://127.0.0.1:8000/admin/
 
-PAYPAL_RECEIVER_EMAIL=""
+Registra un profesor y crea cursos / Register a teacher and create courses
 
-PAYPAL_TEST=True
+Registra un estudiante y realiza los ejercicios / Register a student and complete exercises
 
-PAYPAL_BUY_BUTTON_IMAGE=""
+⚠️ Notas / Notes
 
-- python manage.py makemigrations
-- python manage.py migrate
-- python manage.py createsuperuser
-- python manage.py runserver
+Este proyecto usa SQLite por defecto. Para cambiar a PostgreSQL o MySQL, edita settings.py.
 
+Si tienes problemas con dependencias, revisa requirements.txt y usa versiones compatibles.
 
+🛠 Tecnologías Usadas / Technologies Used
+
+Django - Backend framework
+
+Bootstrap - Frontend framework
+
+SQLite - Base de datos por defecto
+
+🏗 Estado del Proyecto / Project Status
+
+🚧 Este proyecto está en desarrollo y nuevas funcionalidades se agregarán pronto.
+🚧 This project is under development, and new features will be added soon.
+
+📩 Contribuir / Contribute
+
+Si quieres contribuir, abre un issue o envía un pull request.
+If you want to contribute, open an issue or submit a pull request.
 
