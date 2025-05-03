@@ -3,10 +3,10 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, HttpResponse
 from .courseForm import CourseForm
 from user.repoisitoriesUser.user_repository import UserRepository
-from register.models import TeacherCourse
+from register.factory.factoryTeacherCourse import TeacherCourseFactory
 from django.contrib import messages
 from courses.repositories.course_repository import CourseRepository
-from lessons.models import Lesson
+from lessons.repositories.lesson_repository import LessonRepository
 
 # Create your views here.
 @login_required(login_url='/login/')
@@ -16,8 +16,8 @@ def create_course(request):
         if form.is_valid():
             course = form.save()
             user =  UserRepository.getUser(request.user.email, request.user.role)
-            teacher_course = TeacherCourse(course=course, teacher = user)
-            teacher_course.save()
+            teacher = TeacherCourseFactory.create_teacher_course(course=course, teacher = user)
+            print(teacher)
             return redirect("myCourses")
     else:
         form = CourseForm()
@@ -33,7 +33,7 @@ def course(request, name):
        course = CourseRepository.get_course(name)
     except: print(f"No existe curso de nombre {name}")
     try:
-        lessons = Lesson.getLessons(name)
+        lessons = LessonRepository.getLessons(name)
     except:
         lessons = []
     return render(request, "course.html", {'course':course, 'lessons': lessons, 'user':user.role})

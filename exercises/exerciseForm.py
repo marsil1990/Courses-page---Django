@@ -48,8 +48,3 @@ class ExerciseForm(forms.ModelForm):
             instance.save()
         return instance
 
-"""class exerciseOptionsForm(forms.ModelForm):
-    class Meta:
-        model = Exercise_options
-        fields = ["answer_option"]
-"""

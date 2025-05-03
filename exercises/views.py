@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
-from .models import ExerciseMultipleOption, Exercise_options, Exercise_passed
+from exercises.models import ExerciseMultipleOption, Exercise_options, Exercise_passed
 from courses.repositories.course_repository import CourseRepository
 from user.repoisitoriesUser.user_repository import UserRepository
-from courses.models import Course
-from user.models import CustomUser
+from exercises.repositories.exercise_repository import ExerciseRepository
 from register.models import RegisterCourse
 from django.contrib.auth.decorators import login_required
-from .form_do_exercise import Do_exercise_to_MultipleOption_Form
+from exercises.factory_exercise_options import ExerciseOptionsFactory
+from exercises.factory_exercise_passed import ExercisePassedFactory
 from exercises.exerciseForm import ExerciseForm
 from django.http import HttpResponseForbidden
 # Create your views here.
@@ -14,7 +14,7 @@ from django.http import HttpResponseForbidden
 
 @login_required(login_url='/login/')
 def exercise(request, id):
-    exercise = ExerciseMultipleOption.objects.get(id=id)
+    exercise = ExerciseRepository.get_exercise(id)
     if request.user.role == "Teacher":
         if request.method == 'POST':
             option = request.POST.get('selected_option')
@@ -31,10 +31,10 @@ def exercise(request, id):
             if option == exercise.answer_correct_multiOption:
                 message = "✅ Correct answer!"
                 student = UserRepository.getUser(request.user.email, request.user.role)
-                Exercise_passed.objects.create(exercise = exercise, CustomUser = student)
+                ExercisePassedFactory.create_exercise_passed(exercise, student)
                 course = exercise.lessons.course
                 total_exercises = CourseRepository.number_exercises_course(course)
-                if total_exercises == Exercise_passed.exercises_completed_by_CustomUser(student, course):
+                if total_exercises == ExerciseRepository.exercises_completed_by_CustomUser(student, course):
                     r = RegisterCourse.objects.get(course=course, student = student)
                     r.aprove = True
                     r.save()
@@ -57,7 +57,7 @@ def create_exercise(request, id_lesson):
             for option_text in options:
                 if option_text.strip():  # Evita opciones vacías
                     print(option_text)
-                    Exercise_options.objects.create(exerciseMultipleOption=exercise, answer_option=option_text)
+                    ExerciseOptionsFactory.create_exercise_options(exercise, option_text)
 
             return redirect("myCourses")
     else:
@@ -66,7 +66,7 @@ def create_exercise(request, id_lesson):
     return render(request, 'create_exercise.html', {"form":form, "user":user})
 
 def exercise_edit(request, id_exercise):
-    exercise =  ExerciseMultipleOption.objects.get(id=id_exercise)
+    exercise =  ExerciseRepository.get_exercise(id_exercise)
     lesson = exercise.lessons
     option_exercise = Exercise_options.objects.filter( exerciseMultipleOption=exercise)
     if request.method == "POST":
@@ -85,8 +85,8 @@ def exercise_edit(request, id_exercise):
 
     return render(request, "exercise_edit.html", {"form": form, "options":option_exercise})
 
-def delete_exercise(reuqest, id_exercise):
-    exercise = ExerciseMultipleOption.objects.get(id =id_exercise)
+def delete_exercise(request, id_exercise):
+    exercise = ExerciseRepository.get_exercise(id_exercise)
     lesson = exercise.lessons
     lesson.numberOfExercises = lesson.numberOfExercises - 1
     lesson.save()

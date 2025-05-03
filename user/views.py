@@ -18,6 +18,7 @@ from .repoisitoriesUser.user_repository import UserRepository
 from .imgForm import ImgForm
 from django.http import JsonResponse
 import json
+from exercises.models import Exercise_passed
 
 
 @login_required(login_url='/login/')
@@ -136,6 +137,7 @@ def edit_profile(request):
                        courses_name= json.loads(deleted_courses)
                        for names in courses_name:
                            RegisterCourse.objects.filter(course=CourseRepository.get_course(names)).delete()
+                           Exercise_passed.objects.filter(CustomUser=user_or_teacher).delete()
             except:
                 print("No se eliminaron los registros a los cursos")
             user_or_teacher.save()

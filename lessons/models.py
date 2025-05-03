@@ -12,18 +12,5 @@ class Lesson(models.Model):
     url_video = models.URLField()
     course = models.ForeignKey(Course, on_delete = models.CASCADE)
 
-    @staticmethod
-    def getCourse(name):
-        course = CourseRepository.get_course(name = name)
-        return course
-    
-    @staticmethod
-    def getLessons(course_name):
-        lessons = Lesson.objects.filter(course__name = course_name)
-        return lessons
-    
-    @staticmethod
-    def getLesson(lesson):
-        lesson = Lesson.objects.filter(id = lesson).first()
-        return lesson
+   
         
